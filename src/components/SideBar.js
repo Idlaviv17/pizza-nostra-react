@@ -1,9 +1,18 @@
+import React, { useContext } from 'react';
+import { AppContext } from '../context/AppContext.js';
 import { MdPayments } from 'react-icons/md';
+import { BiLogOut } from 'react-icons/bi';
 import { GiReceiveMoney } from 'react-icons/gi';
 import { useNavigate } from 'react-router-dom';
 
 const SideBar = () => {
   const navigate = useNavigate();
+  const { setIsAuthorized } = useContext(AppContext);
+
+  const handleLogout = () => {
+    setIsAuthorized(false);
+    navigate('/login');
+  };
 
   return (
     <div
@@ -40,6 +49,12 @@ const SideBar = () => {
             <a className='nav-link' onClick={() => navigate('/salarios')}>
               <GiReceiveMoney className='bi me-2' width='16' height='16' />
               Salarios
+            </a>
+          </li>
+          <li className='nav-item element'>
+            <a className='nav-link' onClick={() => handleLogout()}>
+              <BiLogOut className='bi me-2' width='16' height='16' />
+              LogOut
             </a>
           </li>
         </ul>

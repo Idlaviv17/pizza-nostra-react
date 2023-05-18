@@ -168,7 +168,8 @@ const Pagos = () => {
         axios.delete(`${url}/${id}`).catch(error => {
           console.error('Error al borrar los datos:', error);
         });
-        reloadPage();
+        //reloadPage();
+        getPagos();
       } else {
         show_alerta('El pago NO fue eliminado', 'info');
       }

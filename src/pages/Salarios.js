@@ -114,7 +114,8 @@ const Salarios = () => {
           axios.delete(`${url}/${id}`).catch(error => {
             console.error('Error al borrar los datos:', error);
           });
-          reloadPage();
+          //reloadPage();
+          getSalarios();
         } else {
           show_alerta('El salario NO fue eliminado', 'info');
         }
