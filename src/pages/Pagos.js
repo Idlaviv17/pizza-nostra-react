@@ -21,14 +21,14 @@ const Pagos = () => {
   const [title, setTitle] = useState('');
 
   useEffect(() => {
-    getProducts();
+    getPagos();
   }, []);
 
   const reloadPage = () => {
     window.location.reload();
   };
 
-  const getProducts = async () => {
+  const getPagos = async () => {
     const response = await axios.get(url);
     setPagos(response.data);
   };
@@ -145,7 +145,7 @@ const Pagos = () => {
           msj = 'El pago se ha actualizado de manera correcta';
         show_alerta(msj, 'success');
         document.getElementById('btnCerrar').click();
-        getProducts();
+        getPagos();
       })
       .catch(function (error) {
         show_alerta('Error en la solicitud', 'error');
@@ -162,18 +162,17 @@ const Pagos = () => {
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar',
-    })
-      .then(result => {
-        if (result.isConfirmed) {
-          setId(id);
-          axios.delete(`${url}/${id}`).catch(error => {
-            console.error('Error al borrar los datos:', error);
-          });
-          reloadPage();
-        } else {
-          show_alerta('El pago NO fue eliminado', 'info');
-        }
-      })
+    }).then(result => {
+      if (result.isConfirmed) {
+        setId(id);
+        axios.delete(`${url}/${id}`).catch(error => {
+          console.error('Error al borrar los datos:', error);
+        });
+        reloadPage();
+      } else {
+        show_alerta('El pago NO fue eliminado', 'info');
+      }
+    });
   };
 
   return (
