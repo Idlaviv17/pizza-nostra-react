@@ -1,5 +1,5 @@
 import React from 'react';
-//import Layout from './components/Layout.js';
+import Layout from './components/Layout.js';
 import { Route, Routes } from 'react-router-dom';
 import Login from './pages/Login.js';
 import Pagos from './pages/Pagos.js';
@@ -14,11 +14,27 @@ const App = () => {
 
       {/* Pagos */}
       <Route>
-        <Route exact path='/pagos' element={<Pagos />} />
+        <Route
+          exact
+          path='/pagos'
+          element={
+            <Layout>
+              <Pagos />
+            </Layout>
+          }
+        />
       </Route>
       {/* Salarios */}
       <Route>
-        <Route exact path='/salarios' element={<Salarios />} />
+        <Route
+          exact
+          path='/salarios'
+          element={
+            <Layout>
+              <Salarios />
+            </Layout>
+          }
+        />
       </Route>
 
       {/* In case a page that doesn't exist is trying to get reached*/}

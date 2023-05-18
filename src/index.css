@@ -11,3 +11,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.main-sidebar {
+  height: 100vh;
+}
+
+.main-content {
+  width: 100vh;
+}
+
+.element {
+  cursor: default;
+  border-radius: 15px;
+}
+
+.element:hover {
+  cursor: pointer;
+  background-color: gainsboro;
+}

@@ -1,11 +1,10 @@
-import Sidebar from "./SideBar.js";
+import Sidebar from './SideBar.js';
 
-// The 'children' in this case will be the APP component
 const Layout = ({ children }) => {
   return (
-    <div className="flex flex-row">
-      <Sidebar />
-      <div className="main-container">{children}</div>
+    <div className='d-flex flex-row'>
+      <Sidebar className='flex-item' />
+      <div className='flex-item main-content'>{children}</div>
     </div>
   );
 };
