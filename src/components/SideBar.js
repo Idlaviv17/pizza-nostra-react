@@ -38,7 +38,7 @@ const SideBar = () => {
         Admin
       </p>
       <div className='sidebar' style={{ marginTop: -25 }}>
-        <ul className='nav flex-column'>
+        <ul className='nav flex-column d-flex'>
           <li className='nav-item element'>
             <a className='nav-link' onClick={() => navigate('/pagos')}>
               <MdPayments className='bi me-2' width='16' height='16' />
@@ -51,7 +51,7 @@ const SideBar = () => {
               Salarios
             </a>
           </li>
-          <li className='nav-item element'>
+          <li className='nav-item element position-fixed bottom-0 start-0 p-1 m-2'>
             <a className='nav-link' onClick={() => handleLogout()}>
               <BiLogOut className='bi me-2' width='16' height='16' />
               LogOut

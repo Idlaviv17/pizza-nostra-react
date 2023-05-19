@@ -24,10 +24,6 @@ const Pagos = () => {
     getPagos();
   }, []);
 
-  const reloadPage = () => {
-    window.location.reload();
-  };
-
   const getPagos = async () => {
     const response = await axios.get(url);
     setPagos(response.data);
@@ -70,7 +66,7 @@ const Pagos = () => {
       setComentario(comentario);
     }
     window.setTimeout(function () {
-      document.getElementById('comentario').focus();
+      document.getElementById('estado').focus();
     }, 500);
   };
 
@@ -100,6 +96,18 @@ const Pagos = () => {
       show_alerta('Por favor proporcione el id del empleado', 'warning');
     } else if (idSalario === '') {
       show_alerta('Por favor proporcione el id del salario', 'warning');
+    } else if (isNaN(horasTrabajadas)) {
+      show_alerta(
+        'Las horas trabajadas deben de ser un valor numérico',
+        'warning'
+      );
+    } else if (isNaN(idEmpleado)) {
+      show_alerta(
+        'El ID del empleado debe de ser un valor numérico',
+        'warning'
+      );
+    } else if (isNaN(idSalario)) {
+      show_alerta('El ID del salario debe de ser un valor numérico', 'warning');
     } else {
       if (operation === 1) {
         parametros = {
@@ -165,11 +173,14 @@ const Pagos = () => {
     }).then(result => {
       if (result.isConfirmed) {
         setId(id);
-        axios.delete(`${url}/${id}`).catch(error => {
-          console.error('Error al borrar los datos:', error);
-        });
-        //reloadPage();
-        getPagos();
+        axios
+          .delete(`${url}/${id}`)
+          .catch(error => {
+            console.error('Error al borrar los datos:', error);
+          })
+          .then(() => {
+            getPagos();
+          });
       } else {
         show_alerta('El pago NO fue eliminado', 'info');
       }
@@ -180,7 +191,7 @@ const Pagos = () => {
     <div className='d-inline'>
       <div className='container-fluid'>
         <div className='row mt-3'>
-          <div className='col-md-4 offset-md-7'>
+          <div className='col-md-4 offset-md-6'>
             <div className='d-grid mx-auto'>
               <button
                 onClick={() => openModal(1)}
@@ -215,9 +226,9 @@ const Pagos = () => {
                   <tr key={pagos.id_pago + i}>
                     <td>{pagos.id_pago}</td>
                     <td>{pagos.estado}</td>
-                    <td>{pagos.fecha}</td>
-                    <td>{pagos.inicio_periodo}</td>
-                    <td>{pagos.fin_periodo}</td>
+                    <td>{pagos.fecha.substring(0, 10)}</td>
+                    <td>{pagos.inicio_periodo.substring(0, 10)}</td>
+                    <td>{pagos.fin_periodo.substring(0, 10)}</td>
                     <td>{pagos.horas_trabajadas}</td>
                     <td>{pagos.id_empleado}</td>
                     <td>{pagos.id_salario}</td>
@@ -273,59 +284,68 @@ const Pagos = () => {
             </div>
             <div className='modal-body'>
               <input type='hidden' id='id'></input>
-
+              <label className='h6'>Estado</label>
               <div className='input-group mb-3'>
                 <span className='input-group-text'>
                   <i className='fa-solid fa-credit-card'></i>
                 </span>
                 <input
-                  type='text'
+                  list='estados'
                   id='estado'
                   className='form-control'
-                  placeholder='Estado'
+                  placeholder='Seleccione un estado'
                   value={estado}
                   onChange={e => setEstado(e.target.value)}
                 ></input>
+                <datalist id='estados'>
+                  <option value='PAGADO' />
+                  <option value='PENDIENTE' />
+                  <option value='CANCELADO' />
+                </datalist>
               </div>
+              <label className='h6'>Fecha</label>
               <div className='input-group mb-3'>
                 <span className='input-group-text'>
                   <i className='fa-solid fa-calendar-days'></i>
                 </span>
                 <input
-                  type='text'
+                  type='date'
                   id='fecha'
                   className='form-control'
                   placeholder='Fecha'
-                  value={fecha}
+                  value={fecha.substring(0, 10)}
                   onChange={e => setFecha(e.target.value)}
                 ></input>
               </div>
+              <label className='h6'>Inicio Periodo</label>
               <div className='input-group mb-3'>
                 <span className='input-group-text'>
                   <i className='fa-solid fa-calendar-days'></i>
                 </span>
                 <input
-                  type='text'
+                  type='date'
                   id='inicioPeriodo'
                   className='form-control'
                   placeholder='Inicio Periodo'
-                  value={inicioPeriodo}
+                  value={inicioPeriodo.substring(0, 10)}
                   onChange={e => setInicioPeriodo(e.target.value)}
                 ></input>
               </div>
+              <label className='h6'>Fin Periodo</label>
               <div className='input-group mb-3'>
                 <span className='input-group-text'>
                   <i className='fa-solid fa-calendar-days'></i>
                 </span>
                 <input
-                  type='text'
+                  type='date'
                   id='finPeriodo'
                   className='form-control'
                   placeholder='Fin Periodo'
-                  value={finPeriodo}
+                  value={finPeriodo.substring(0, 10)}
                   onChange={e => setFinPeriodo(e.target.value)}
                 ></input>
               </div>
+              <label className='h6'>Horas Trabajadas</label>
               <div className='input-group mb-3'>
                 <span className='input-group-text'>
                   <i className='fa-solid fa-clock'></i>
@@ -339,6 +359,7 @@ const Pagos = () => {
                   onChange={e => setHorasTrabajadas(e.target.value)}
                 ></input>
               </div>
+              <label className='h6'>ID Empleado</label>
               <div className='input-group mb-3'>
                 <span className='input-group-text'>
                   <i className='fa-solid fa-id-card'></i>
@@ -352,6 +373,7 @@ const Pagos = () => {
                   onChange={e => setIdEmpleado(e.target.value)}
                 ></input>
               </div>
+              <label className='h6'>ID Salario</label>
               <div className='input-group mb-3'>
                 <span className='input-group-text'>
                   <i className='fa-solid fa-id-card'></i>
@@ -365,6 +387,7 @@ const Pagos = () => {
                   onChange={e => setIdSalario(e.target.value)}
                 ></input>
               </div>
+              <label className='h6'>Comentario</label>
               <div className='input-group mb-3'>
                 <span className='input-group-text'>
                   <i className='fa-solid fa-comment'></i>

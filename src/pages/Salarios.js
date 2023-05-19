@@ -18,21 +18,12 @@ const Salarios = () => {
     getSalarios();
   }, []);
 
-  const reloadPage = () => {
-    window.location.reload();
-  };
-
   const getSalarios = async () => {
     const response = await axios.get(url);
     setSalarios(response.data);
   };
 
-  const openModal = (
-    op,
-    id,
-    costePorHora,
-    rol
-  ) => {
+  const openModal = (op, id, costePorHora, rol) => {
     setId('');
     setCostePorHora('');
     setRol('');
@@ -57,6 +48,8 @@ const Salarios = () => {
       show_alerta('Por favor especifique el coste por hora', 'warning');
     } else if (rol.trim() === '') {
       show_alerta('Por favor especifique el rol asociado', 'warning');
+    } else if (isNaN(costePorHora)) {
+      show_alerta('El coste por hora debe de ser un valor numérico', 'warning');
     } else {
       if (operation === 1) {
         parametros = {
@@ -107,19 +100,21 @@ const Salarios = () => {
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar',
-    })
-      .then(result => {
-        if (result.isConfirmed) {
-          setId(id);
-          axios.delete(`${url}/${id}`).catch(error => {
+    }).then(result => {
+      if (result.isConfirmed) {
+        setId(id);
+        axios
+          .delete(`${url}/${id}`)
+          .catch(error => {
             console.error('Error al borrar los datos:', error);
+          })
+          .then(() => {
+            getSalarios();
           });
-          //reloadPage();
-          getSalarios();
-        } else {
-          show_alerta('El salario NO fue eliminado', 'info');
-        }
-      })
+      } else {
+        show_alerta('El salario NO fue eliminado', 'info');
+      }
+    });
   };
 
   return (
@@ -163,7 +158,7 @@ const Salarios = () => {
                             2,
                             salario.id_salario,
                             salario.coste_por_hora,
-                            salario.rol,
+                            salario.rol
                           )
                         }
                         className='btn btn-primary'
@@ -201,6 +196,7 @@ const Salarios = () => {
             </div>
             <div className='modal-body'>
               <input type='hidden' id='id'></input>
+              <label className='h6'>Coste por Hora</label>
               <div className='input-group mb-3'>
                 <span className='input-group-text'>
                   <i className='fa-solid fa-clock'></i>
@@ -214,6 +210,7 @@ const Salarios = () => {
                   onChange={e => setCostePorHora(e.target.value)}
                 ></input>
               </div>
+              <label className='h6'>Rol</label>
               <div className='input-group mb-3'>
                 <span className='input-group-text'>
                   <i className='fa-solid fa-user'></i>
